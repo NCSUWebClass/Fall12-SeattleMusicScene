@@ -1,7 +1,21 @@
 #Change Log
 
+##Date: November 20, 2012
+##Time: 11 am
+##User: Charles Smith (cjsmit12@ncsu.edu)
+
+*added History content from band map blog
+*added place for Band Mapper Information
+*added a follow button to the band map twitter page
+
+##TODO:
+*All search and database management
+*Dynamically laying out search content.
+*Establish mysql server and necessary php for searching and retrieving data from databse
+*Add Mapper information (have an idea of how to implement)
+
 ##Date: November 19, 2012
-##Time: 9:20
+##Time: 9:20 pm
 ##User: Charles Smith (cjsmit12@ncsu.edu)
 
 *Made initial home page and page template.
