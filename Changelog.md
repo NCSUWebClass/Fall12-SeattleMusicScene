@@ -12,10 +12,7 @@
 *Created Non-Functioning Search Box
 *Created contact page with mailto link
 
-I got the ground work going, but there's still tons to be done.  
-The following link is to the documentation for jquery mobile.  Its actually a very useful site, with lots of example elements to look at.
-http://jquerymobile.com/demos/1.2.0/
-
+I got the ground work going, but there's still tons to be done.
 
 ##TODO:
 *All search and database management
