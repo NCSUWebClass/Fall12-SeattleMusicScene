@@ -72,9 +72,11 @@ In 2011, with the help of University of Washington computer science student Golf
 	<!--/content-->
 
 	<!--footer-->
-		<div data-role="footer"  class="ui-bar ui-state-persist" class="center-text"  data-position="fixed">
+		<div data-role="footer"  class="ui-bar ui-state-persist"  data-position="fixed">
 			<a href="index.php" data-ajax="false" class="left-text"  data-icon="home">Home</a>
+			<div class="center-text">
 			Seattle Band Map
+			</div>
 			<a href="contact.php" class="right-text" >Contact Us</a>
 		</div>
 	<!--/footer-->
