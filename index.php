@@ -16,8 +16,9 @@
 	<div data-role="page" id="homePage" data-title="Seattle Band Map">
 	
 	<!--header-->
-	<div data-position="fixed" data-role="header">
-	<h1>Seattle Band Map</h1></div>
+	<div data-position="fixed" data-role="header" class="center-text">
+	<p>Seattle Band Map</p>
+	</div>
 	<!--/header-->
 
 	<!--content of page-->
@@ -71,7 +72,7 @@ In 2011, with the help of University of Washington computer science student Golf
 	<!--/content-->
 
 	<!--footer-->
-		<div data-role="footer"  class="ui-bar ui-state-persist"  data-position="fixed"><a href="index.php" data-ajax="false" data-icon="home">Home</a><a href="contact.php" >Contact Us</a>Seattle Band Map</div>
+		<div data-role="footer"  class="ui-bar ui-state-persist left-text"  data-position="fixed"><a href="index.php" data-ajax="false" data-icon="home">Home</a><a href="contact.php" >Contact Us</a></div>
 	<!--/footer-->
 	</div>
 

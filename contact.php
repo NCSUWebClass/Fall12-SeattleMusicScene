@@ -18,8 +18,8 @@
 	<div data-role="page" data-position="fixed" id="contactPage" data-title="Seattle Band Map" data-add-back-btn="true">
 
 	<!--header-->	
-	<div data-role="header">
-	<h1>Contact Us</h1>
+	<div data-role="header" class="center-text">
+	<p>Contact Us</p>
 	</div>
 	<!--/header-->
 	<!--content of page-->
@@ -41,9 +41,8 @@
 	<!--/content-->
 
 	<!--footer-->
-		<div data-position="fixed" data-role="footer" class="ui-bar ui-state-persist center-text" data-position="fixed">
+		<div data-position="fixed" data-role="footer" class="ui-bar ui-state-persist left-text" data-position="fixed">
 			<a href="index.php" data-ajax="false" data-icon="home">Home</a>
-			Seattle Band Map
 			<a href="contact.php">Contact Us</a>
 		</div>
 	<!--/footer-->
