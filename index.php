@@ -9,7 +9,6 @@
 	<link rel="stylesheet" type="text/css" href="page_css.css">
 	<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 	<script src="http://code.jquery.com/mobile/latest/jquery.mobile.min.js"></script>
-	
 </head>
 
 <body>
@@ -27,10 +26,10 @@
 			
 			<h1 class="center-text">Welcome to the Seattle Band Map</h1>
 			<br>
-			    <form action="search.php" method="POST">
-			     Search: <input type="text" name="term" />
-			    <input type="submit" name="submit" value="Submit" />
-			    </form>
+			<form action="search.php" method="post" data-ajax="false">
+			<input type="text" name="term" id="search-box" placeholder="Artist or Band Name" data-theme="a" data-ajax="false" />
+			<input type="submit" name="submit" value="Submit" data-theme="a" data-inline="true" data-ajax="false"/>
+			</form>
 			<br>
 			<br>
 
