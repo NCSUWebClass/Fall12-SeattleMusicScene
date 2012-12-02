@@ -27,12 +27,10 @@
 			
 			<h1 class="center-text">Welcome to the Seattle Band Map</h1>
 			<br>
-			<form action="search.php" method="post">
-			<input type="text" name="term" id="search-box" placeholder="Artist or Band Name" data-theme="a" />
-			<div class="center-text">
-			<input type="submit" name="submit" data-theme="a" value="Submit" data-inline="true"/>
-			</div>
-			</form>
+			    <form action="search.php" method="POST">
+			     Search: <input type="text" name="term" />
+			    <input type="submit" name="submit" value="Submit" />
+			    </form>
 			<br>
 			<br>
 
