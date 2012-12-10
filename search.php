@@ -16,7 +16,7 @@
 			mysql_close();
 		} else if (!empty($_GET["query"])){
 			$name = $_GET["query"];
-			mysql_connect("127.0.0.1", "bandmap", "bandmap"); //Ryan Fredette: these are my local credentials for accessing the mysql server.
+			mysql_connect("localhost", "bandmap", "bandmap"); //Ryan Fredette: these are my local credentials for accessing the mysql server.
 			mysql_select_db("seattlebandmap"); 				// we need to change these to match the ones on the server
 			$query = "SELECT * FROM bands WHERE `name` like '%" . mysql_escape_string($name) . "%';";
 			$result = mysql_query($query);
