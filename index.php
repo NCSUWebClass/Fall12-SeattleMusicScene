@@ -27,9 +27,9 @@
 			
 			<h1 class="center-text">Welcome to the Seattle Band Map</h1>
 			<br>
-			<form action="search.php" method="post" data-ajax="false">
-			<input type="text" name="term" id="search-box" placeholder="Artist or Band Name" data-theme="a" data-ajax="false" />
-			<input type="submit" name="submit" value="Submit" data-theme="a" data-inline="true" data-ajax="false"/>
+			<form action="search.php" method="get" data-ajax="false">
+				<input type="text" name="query" id="search-box" placeholder="Artist or Band Name" data-theme="a" data-ajax="false" />
+				<input type="submit" value="Submit" data-theme="a" data-inline="true" data-ajax="false"/>
 			</form>
 			<br>
 			<br>
