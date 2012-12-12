@@ -9,24 +9,38 @@
 		$mysql_user = "bandmap";// and they'll need to be changed for use on another server
 		$mysql_pass = "bandmap";
 		$mysql_db_name = "seattlebandmap";
+		$mysql_conn = mysqli_connect($mysql_server, $mysql_user, $mysql_pass);
+		$mysql_conn->select_db($mysql_db_name);
+
+		$search_stmt = null;
+		$id = null;
+		$name = null;
+		$city = null;
+		$state = null;
+		$website = null;
+		$members = null;
+		$num_rows = null;
+
 		// the code that executes the search, or returns the user to the index if no search term is given
 		if (!empty($_GET["id"])) {
 			$id = $_GET["id"];
-			mysql_connect($mysql_server, $mysql_user, $mysql_pass);
-			mysql_select_db($mysql_db_name);
-			$query = "SELECT * FROM bands WHERE `id`='" . (string)$id . "';";
-			$result = mysql_query($query);
-			$num = mysql_num_rows($result);
-			mysql_close();
+			$search_stmt = $mysql_conn->prepare("SELECT id, name, city, state, website, members FROM bands WHERE `id`=?;");
+			echo($mysql_conn->error);
+			$search_stmt->bind_param('i', $id);
+			$search_stmt->execute();
+			$search_stmt->bind_result($id, $name, $city, $state, $website, $members);
+			$search_stmt->store_result();
+			$num_rows = $search_stmt->num_rows;
 		} else if (!empty($_GET["query"])){
 			$name = $_GET["query"];
-			mysql_connect($mysql_server, $mysql_user, $mysql_pass);
-			mysql_select_db("seattlebandmap");
-			$query = "SELECT * FROM bands WHERE `name` like '%" . mysql_escape_string($name) . "%';";
-			$result = mysql_query($query);
-			$num = mysql_num_rows($result);
-			mysql_close();
+			$search_stmt = $mysql_conn->prepare("SELECT id, name, city, state, website, members FROM bands WHERE `name` LIKE CONCAT ('%', ? , '%');");
+			$search_stmt->bind_param('s', $name);
+			$search_stmt->execute();
+			$search_stmt->bind_result($id, $name, $city, $state, $website, $members);
+			$search_stmt->store_result();
+			$num_rows = $search_stmt->num_rows;
 		} else {
+			$mysql_conn->close();
 			header("Location: index.php");
 		}
 	?>
@@ -51,73 +65,75 @@
 		</p>
 		<p class="center-text">
 			<?
-				if ($num == 0) {
+				if ($num_rows == 0) {
 					echo("No bands match the name you input.");
-				} else if ($num == 1) {
+				} else if ($num_rows == 1) {
 					/* graph code also goes here */
+					$search_stmt->fetch();
 					//Name
-					echo(mysql_result($result, 0, "name") . "<br/>");
+					echo($name . "<br/>");
 					//connections
-					mysql_connect($mysql_server, $mysql_user, $mysql_pass);
-					mysql_select_db($mysql_db_name);
-					$id = mysql_result($result, 0, "id");
-					$query = "SELECT * FROM connections WHERE `band1`=" . (string)$id . " OR `band2`=" . (string)$id . ";";
-					$connections = mysql_query($query);
-					$num = mysql_num_rows($connections);
+					$band1 = null;
+					$band2 = null;
+					$connected_bands_stmt = $mysql_conn->prepare("SELECT band1, band2 FROM connections WHERE `band1`=? OR `band2`=?;");
+					$connected_bands_stmt->bind_param('ii', $id, $id);
+					$connected_bands_stmt->execute();
+					$connected_bands_stmt->bind_result($band1, $band2);
+					$connected_bands_stmt->store_result();
+					$num_rows = $connected_bands_stmt->num_rows;
 					echo("<div class=\"connections\" data-role=\"content\">\n");
-					if ($num == 1) {//any number other than one should say "connections", whereas if there is only 1 connection, it should not be plural
+					if ($num_rows == 1) {//any number other than one should say "connections", whereas if there is only 1 connection, it should not be plural
 						echo("1 Connection: ");
 					} else {
-						echo((string)$num . " Connections: ");
+						echo((string)$num_rows . " Connections: ");
 					}
-					for( $i = 0; $i < $num; $i++) {
-						$connected_id = mysql_result($connections, $i, "band1");
+					$connected_band_names = "";
+					while ($connected_bands_stmt->fetch()) {
+						$connected_id = $band1;
 						if (strcmp($connected_id, $id) == 0) {//if the id is the same as the band we're generating a graph from
-							$connected_id = mysql_result($connections, $i, "band2");//use the other id that is provided
+							$connected_id = $band2;//use the other id that is provided
 						}
-						$query = "SELECT * FROM bands WHERE `id`=" . (string)$connected_id . ";";
-						$connected_band = mysql_query($query);
-						if (mysql_num_rows($connected_band) != 1) {
-							throw new Exception("There are " . mysql_num_rows($connected_band) . " bands with id " . $connected_id);
+						$connected_stmt = $mysql_conn->prepare("SELECT name FROM bands WHERE `id`=?;");
+						echo($mysql_conn->error);
+						$connected_stmt->bind_param('i', $connected_id);
+						$connected_stmt->execute();
+						$connected_stmt->bind_result($connected_band);
+						$connected_stmt->store_result();
+						if ($connected_stmt->num_rows != 1) {
+							throw new Exception("There are " . $connected_stmt->num_rows . " bands with id " . $connected_id);
 						}
-						if ($i != 0) {
-							echo(", "); //put a comma before every item other than the first in the comma seperated list
-						}
-						echo("<a href=search.php?id=" . $connected_id . ">");
-						echo(filter_var(mysql_result($connected_band, 0, "name"), FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH));
-						echo("</a>");
+						$connected_stmt->fetch();
+						$connected_band_names .= "<a href=search.php?id=" . $connected_id . ">";
+						$connected_band_names .= filter_var($connected_band, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
+						$connected_band_names .= "</a>, ";
 					}
+					echo(trim($connected_band_names, ", "));
 					echo("\n</div>");
 					//location
 					echo("<div class=\"location\" data-role=\"content\">\n");
 					echo("Location: ");
-					$city = mysql_result($result, 0, "city");
-					$state = mysql_result($result, 0, "state");
 					$location .= $city . ", " . $state;
 					$location = trim($location, ", ");
 					echo(filter_var($location, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH));
 					echo("\n</div>");
 					//website
 					echo("<div class=\"website\" data-role=\"content\">\n");
-					$website = mysql_result($result, 0, "website");
 					echo("Website: ");
 					echo("<a href=" . $website . ">");
 					echo(filter_var($website, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH));
 					echo("</a>\n</div>");
 					//members
 					echo("<div class=\"website\" data-role=\"content\">\n");
-					echo("Members: " . filter_var(mysql_result($result, 0, "members"), FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH));
+					echo("Members: " . filter_var($members, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH));
 					echo("\n</div>");
 					//edit button?
-					mysql_close();
 				} else {
-					echo("There are " . (string)$num . " results. Did you mean:<br/>");
-					for( $i = 0; $i < $num; $i++) {
-						$name = mysql_result($result,$i,"name");
-						$id = mysql_result($result,$i,"id");
+					echo("There are " . (string)$num_rows . " results. Did you mean:<br/>");
+					while ( $search_stmt->fetch() ) {
 						echo("<a href=search.php?id=" . (string)$id . ">" . $name . "</a><br/>");
 					}
 				}
+				$mysql_conn->close();
 			?>
 		</p>
 	</div>
