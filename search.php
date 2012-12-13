@@ -49,7 +49,7 @@
 		
 		if (mysql_num_rows($result) <= 0) {
 			echo 'ERROR: No results to display';
-		} else if (mysql_num_rows($result) == 1 || $_GET['term'] == "nirvana") {
+		} else if (mysql_num_rows($result) == 1 || $_GET['term'] == "nirvana" || $_GET['term'] == "Nirvana") {
 			echo '<script type="text/javascript" language="javascript">';
             echo 'var connections = new Array();';
             echo 'var i = 0;';
@@ -131,17 +131,63 @@
 	            	echo "<br/>";
 				}
 				echo "</td>";
+			}
+				
+				// begin canvas
+			echo '<canvas id="map" width="300" height="500" style="border:0px solid #000000;">Your browser does not support HTML5 canvas</canvas>';
+		
+			echo '<script>';
+			echo 'var c=document.getElementById("map");';
+			echo 'var ctx=c.getContext("2d");';
+			echo 'ctx.beginPath();';
+			echo 'ctx.arc(50,250,9,0,2*Math.PI);';
+			echo 'ctx.stroke();';
+			echo 'ctx.closePath();';
+			echo 'ctx.font="12px Arial";';
+			echo 'ctx.fillText("0",47,254);';
+			$location = 0;
+			for ($i = 1; $i <= $total_connections; $i++) {
+				$location = 15 + (478 / $total_connections)*($i - 1);
+				if (($i % 3) == 0) {
+					echo "ctx.strokeStyle='#6f0000';";
+				} else if (($i % 3) == 1) {
+					echo "ctx.strokeStyle='#006f00';";
+				} else {
+					echo "ctx.strokeStyle='#00006f';";
+				}
+				echo 'ctx.beginPath();';
+				echo 'ctx.moveTo(59,250);';
+				echo 'ctx.lineTo(241,' . $location . ');';
+				echo 'ctx.stroke();';
+				echo 'ctx.closePath();';
+				echo "ctx.strokeStyle='#000000';";
+				echo 'ctx.beginPath();';
+				echo 'ctx.arc(250,' . $location . ',9,Math.PI,3*Math.PI);';
+				echo 'ctx.stroke();';
+				echo 'ctx.closePath();';
+				echo 'ctx.strokeStyle="black";';
+				echo 'ctx.font="12px Arial";';
+				if ($i < 10) {
+					echo 'ctx.fillText("' . $i . '",247,' . ($location + 4) . ');';
+				} else {
+					echo 'ctx.fillText("' . $i . '",243,' . ($location + 4) . ');';
+				}
+			}
+			echo 'ctx.stroke();';
+		
+			echo '</script>';
+		
 			//} else if (mysql_num_rows($result) >= 2) {
-			} else {
+		} else {
 			echo 'Multiple results available:';
 			while ($row = mysql_fetch_array($result)) {
 				echo '<br/>';
 				echo '<a data-ajax="false" href="search.php?term=' . str_replace(' ', '+', $row['name']) . '">' . $row['name'] . '</a>';
 			}
 		}
-			echo "</tr>";
+		echo "</tr>";
                 
-            echo '</table>';
+        echo '</table>';
             
             /*
 if ($divloader <> "") {
@@ -152,10 +198,11 @@ if ($divloader <> "") {
             //echo '<script type="text/javascript" language="javascript">';
             //echo 'var connections = new Array()';
             //echo 'for (var i = 0; i < ' . mysql_num_rows($result_trip)
-		} 
+	 
 		
 		// begin canvas
-		echo '<canvas id="map" width="300" height="500" style="border:0px solid #000000;">Your browser does not support HTML5 canvas</canvas>';
+		/*
+echo '<canvas id="map" width="300" height="500" style="border:0px solid #000000;">Your browser does not support HTML5 canvas</canvas>';
 		
 		echo '<script>';
 		echo 'var c=document.getElementById("map");';
@@ -197,6 +244,7 @@ if ($divloader <> "") {
 		echo 'ctx.stroke();';
 		
 		echo '</script>';
+*/
 		
 		echo '</p>';
 		echo '</div>';
