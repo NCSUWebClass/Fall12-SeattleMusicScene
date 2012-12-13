@@ -6,13 +6,8 @@
 	<script src="http://code.jquery.com/mobile/latest/jquery.mobile.min.js"></script>
 	<?
 		$mysql_server = "localhost";// Ryan Fredette: these are the stats for my machine,
-		//$mysql_user = "bandmap";// and they'll need to be changed for use on another server
-		//$mysql_pass = "bandmap";
 		$mysql_user = "webappteam";//server side
-		$mysql_pass = "";//the server doesn't use a password for the account in question
-		//$mysql_db_name = "seattlebandmap";
 		$mysql_db_name = "bandsdb";
-		//$mysql_conn = mysqli_connect($mysql_server, $mysql_user, $mysql_pass);
 		$mysql_conn = mysqli_connect($mysql_server, $mysql_user);
 		$mysql_conn->select_db($mysql_db_name);
 
