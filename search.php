@@ -24,7 +24,7 @@
 	<div data-role="header" class="center-text">
 	<p>
 		<!-- Seattle Band Map -->
-		Search Results for "<?php echo $_GET['term']; ?>"
+		Search Results for "<?php echo $_GET['term']; if ($_GET['term'] == "rick james" || $_GET['term'] == "Rick James") echo '", bitch.'; else echo '"' ?>
 	</p>
 </div>
 	<!--/header-->
