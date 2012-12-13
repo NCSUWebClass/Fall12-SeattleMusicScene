@@ -27,8 +27,8 @@
 			
 			<h1 class="center-text">Welcome to the Seattle Band Map</h1>
 			<br>
-			<form action="search.php" method="post" data-ajax="false">
-			<input type="text" name="term" id="search-box" placeholder="Artist or Band Name" data-theme="a" data-ajax="false" />
+			<form action="search.php" method="get" data-ajax="false">
+			<input type="text" name="term" id="search-box" placeholder="Band Name" data-theme="a" data-ajax="false" />
 			<input type="submit" name="submit" value="Submit" data-theme="a" data-inline="true" data-ajax="false"/>
 			</form>
 			<br>
@@ -61,8 +61,25 @@ In 2011, with the help of University of Washington computer science student Golf
 			<!--Band Mappers-->
 			<!--Content copied from desktop site-->
 			<div data-role="collapsible" data-theme="a" data-content-theme="a">
-   			<h3>Band Mappers</h3>
-   			<p>
+   			<h3>Top Searches</h3>
+   			<p class="left-text">
+   				Top 5 most popular searches:<br/><br/>
+   				<?php
+   				
+   					$con = mysql_connect("localhost","webappteam");
+   					if (!$con) {
+	   					die('Could not connect: ' . mysql_error());
+	   				}
+		
+	   				mysql_select_db("bandsdb", $con);
+	   				
+	   				$sql = "SELECT * FROM bands ORDER BY click_count DESC LIMIT 5";
+	   				$result = mysql_query($sql,$con);
+	   				for ($i = 1; $i <= 5; $i++) {
+	   					$row = mysql_fetch_array($result);
+	   					echo $i . '. ' . '<a data-ajax="false" href="search.php?term=' . str_replace(' ', '+', $row['name']) . '">' . $row['name'] . '</a><br/>';
+	   				}
+   				?>
 				<!--Fill content in-->	
 			</p>
 			</div>
